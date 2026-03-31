@@ -5,6 +5,7 @@
 dfn {
     font-style: italic
 }
+.table-wrapper tr,
 .table-wrapper td, 
 .table-wrapper th{
     text-align:center;
