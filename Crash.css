@@ -1434,7 +1434,7 @@ thead th {
 }
 
 blockquote {
-    color: rgba(0, 0, 0, .5);
+    color: rgba(255, 255, 255, 1);
     padding-left: 1.5em;
     border-left: 5px solid rgba(0, 0, 0, .1)
 }
