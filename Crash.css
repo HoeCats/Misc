@@ -5,7 +5,8 @@
 dfn {
     font-style: italic
 }
-.table-wrapper td, .table-wrapper th{
+.table-wrapper td, 
+.table-wrapper th{
     text-align:center;
 }
 .katex .clap>.inner,
