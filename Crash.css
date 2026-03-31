@@ -17,7 +17,9 @@ img,
 legend {
     max-width: 100%
 }
-
+li {
+    font-weight:bold;
+}
 progress,
 sub,
 sup {
