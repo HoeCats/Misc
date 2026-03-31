@@ -10,6 +10,9 @@ dfn {
 .table-wrapper th{
     text-align:center;
 }
+li+li{
+    margin-top:10px;
+}
 .katex .clap>.inner,
 .katex .llap>.inner,
 .katex .rlap>.inner,
