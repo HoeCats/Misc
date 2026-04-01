@@ -405,37 +405,18 @@ document.querySelectorAll('.term-ref').forEach(item => {
 			tooltip.style.display = 'block';
 		}
 	});
-
-	item.addEventListener('mousemove', e => {
-		if (updateTooltipContent(term)) {
-			const rect = target.getBoundingClientRect();
-			const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-			const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-			let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
-			const padding = 15;
-			if (leftPos < padding)
-				leftPos = padding;
-			if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
-				leftPos = window.innerWidth - tooltip.offsetWidth - padding;
-			}
-			tooltip.style.left = leftPos + 'px';
-			tooltip.style.top = (rect.bottom + scrollY + 12) + 'px';
-			tooltip.style.display = 'block'; // Ensure it's visible
-		}
-		if (isHoverable) {
-			item.addEventListener('mouseenter', showTooltip);
-			item.addEventListener('mousemove', e => {
-				const xPosition = e.clientX - (tooltip.offsetWidth / 2);
-				const yPosition = e.clientY + 20;
-				tooltip.style.left = xPosition + 'px';
-				tooltip.style.top = yPosition + 'px';
-				       
-			});
-			item.addEventListener('mouseleave', () => {
-				tooltip.style.display = 'none';
-			});
-		}
-	});
+	if (isHoverable) {
+		item.addEventListener('mouseenter', showTooltip);
+		item.addEventListener('mousemove', e => {
+			const xPosition = e.clientX - (tooltip.offsetWidth / 2);
+			const yPosition = e.clientY + 20;
+			tooltip.style.left = xPosition + 'px';
+			tooltip.style.top = yPosition + 'px';
+		});
+		item.addEventListener('mouseleave', () => {
+			tooltip.style.display = 'none';
+		});
+	}
 });
 
   </script>
