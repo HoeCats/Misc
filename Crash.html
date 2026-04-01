@@ -353,9 +353,8 @@ const definitions = {
   linkTerms();
   const tooltip = document.getElementById('dynamic-tooltip');
   const termDef = document.getElementById('tooltip-def');
-  const isHoverable = window.matchMedia('(hover: hover)').matches;
+const isHoverable = window.matchMedia('(hover: hover)').matches;
 
-// 1. Centralized content updater
 function updateTooltipContent(term) {
     const definition = definitions[term] || (term === "Leverage" ? "Using borrowed money..." : null);
     if (definition) {
@@ -367,51 +366,55 @@ function updateTooltipContent(term) {
 }
 
 document.querySelectorAll('.term-ref').forEach(item => {
-    // 2. MOBILE / CLICK LOGIC
+    // MOBILE / CLICK: Anchor to the WORD
     item.addEventListener('click', e => {
         e.stopPropagation();
-        const term = e.target.getAttribute('data-term');
+        const term = e.currentTarget.getAttribute('data-term');
         
         if (updateTooltipContent(term)) {
-            // Only use static positioning if we aren't currently tracking a mouse
-            const rect = e.target.getBoundingClientRect();
+            const rect = e.currentTarget.getBoundingClientRect();
             const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
             const scrollY = window.pageYOffset || document.documentElement.scrollTop;
             
+            // Center the tooltip relative to the word's bounding box
             let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
-            const padding = 10;
             
-            // Screen boundary checks
+            // Screen edge protection
+            const padding = 15;
             if (leftPos < padding) leftPos = padding;
             if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
                 leftPos = window.innerWidth - tooltip.offsetWidth - padding;
             }
 
             tooltip.style.left = leftPos + 'px';
-            tooltip.style.top = (rect.bottom + scrollY + 10) + 'px';
+            tooltip.style.top = (rect.bottom + scrollY + 12) + 'px';
         }
     });
 
-    // 3. DESKTOP / MOUSEMOVE LOGIC
+    // DESKTOP / HOVER: Anchor to the CURSOR
     if (isHoverable) {
         item.addEventListener('mouseenter', e => {
-            const term = e.target.getAttribute('data-term');
+            const term = e.currentTarget.getAttribute('data-term');
             updateTooltipContent(term);
         });
 
         item.addEventListener('mousemove', e => {
-            // Position tooltip relative to cursor
-            let finalX = e.clientX - (tooltip.offsetWidth / 2);
-            const finalY = e.clientY + 20;
+            const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
 
-            // Desktop boundary checks
-            if (finalX + tooltip.offsetWidth > window.innerWidth) {
-                finalX = window.innerWidth - tooltip.offsetWidth - 10;
+            // Align tooltip center with cursor X
+            let finalX = e.clientX + scrollX - (tooltip.offsetWidth / 2);
+            let finalY = e.clientY + scrollY + 25; // 25px below cursor
+
+            // Desktop edge protection
+            const padding = 15;
+            if (finalX < padding) finalX = padding;
+            if (finalX + tooltip.offsetWidth > window.innerWidth + scrollX - padding) {
+                finalX = window.innerWidth + scrollX - tooltip.offsetWidth - padding;
             }
-            if (finalX < 10) finalX = 10;
 
             tooltip.style.left = finalX + 'px';
-            tooltip.style.top = (window.scrollY + finalY) + 'px'; // Account for page scroll
+            tooltip.style.top = finalY + 'px';
         });
 
         item.addEventListener('mouseleave', () => {
@@ -420,6 +423,7 @@ document.querySelectorAll('.term-ref').forEach(item => {
     }
 });
 
+// Global close
 document.addEventListener('click', () => {
     tooltip.style.display = 'none';
 });
