@@ -49,8 +49,8 @@
 
     <h3 id="the-japanese-carry-fuse">The Japanese Carry Fuse</h3>
 
-    <p>This entire <span class="term-ref" data-term="Leverage">leveraged</span> system depends on the Yen Carry Trade. For decades, near-zero rates from the Bank of Japan (BoJ) provided a vacuum for cheap borrowing. But as the BoJ raises rates in 2026 to combat inflation, the carry has become a cost. This is forcing a global deleveraging fire sale. To cover currency exposure, funds are dumping U.S. Treasuries and tech stocks simultaneously, triggering a global margin call that the Fed cannot print its way out of without destroying the
-    dollar’s value.</p>
+    <p>This entire <span class="term-ref" data-term="Leverage">leveraged</span> system depends on the Yen Carry Trade. For decades, near-zero rates from the Bank of Japan (BoJ) provided a vacuum for cheap borrowing. But as the BoJ raises rates in 2026 to combat inflation, the carry has become a cost. This is forcing a global deleveraging fire sale. To cover currency exposure, funds are dumping U.S. Treasuries and tech stocks simultaneously, triggering a global margin call that the Fed cannot
+    print its way out of without destroying the dollar’s value.</p>
 
     <h3>The Desperate A.I. Hail Mary and the Energy Wall</h3>
 
@@ -62,8 +62,9 @@
 
     <p>The U.S. Net International Investment Position (NIIP) plummeted to <strong>-$27.54 trillion</strong> at the end of 2025. This hollowing out is accelerated by a <strong>10.3% effective tariff rate</strong> as of early 2026, rendering the dollar a less efficient medium of exchange for allies and leaving the deficit-funding market increasingly isolated.</p>
 
-    <p>The underlying economic picture is a <strong>Velocity Vacuum</strong> where growth is fake and debt is real. If AI achieves profitability, it does so by eliminating the very wages that fuel consumption. While half of the 2025 GDP gain came from healthcare and software, the professional services sector simultaneously shed <strong>173,000 jobs</strong>. This creates a paradox where GDP gains are captured entirely by debt-servicing for decaying hardware, masking a household Empty Tank
-    that makes 2026 fundamentally more dangerous than 2008 or 2020:</p>
+    <p>The underlying economic picture is a <strong>Velocity Vacuum</strong> where growth is fake and debt is real. If AI achieves profitability, it does so by eliminating the very wages that fuel consumption. While half of the 2025 GDP gain came from healthcare and software, the professional services sector simultaneously shed <strong>173,000 jobs</strong>. This creates a paradox where GDP gains are captured entirely by debt-servicing for decaying hardware, masking a household Empty Tank that
+    makes 2026 fundamentally more dangerous than 2008 or 2020:</p>
+
     <div class="table-wrapper">
       <table>
         <thead>
@@ -111,6 +112,7 @@
         </tbody>
       </table>
     </div>
+
     <ul>
       <li><strong>The 2008 Wealth Gap:</strong> In 2008, the bottom 50% held a small but tangible slice of wealth; by 2026, their share has eroded to a mere <strong>2.5% of total U.S. wealth</strong>, leaving no buffer for a systemic shock.</li>
 
@@ -349,52 +351,78 @@ const definitions = {
   }
 
   linkTerms();
-
   const tooltip = document.getElementById('dynamic-tooltip');
   const termDef = document.getElementById('tooltip-def');
+  const isHoverable = window.matchMedia('(hover: hover)').matches;
 
-  function showTooltip(e) {
+// 1. Centralized content updater
+function updateTooltipContent(term) {
+    const definition = definitions[term] || (term === "Leverage" ? "Using borrowed money..." : null);
+    if (definition) {
+        termDef.innerText = definition;
+        tooltip.style.display = 'block';
+        return true;
+    }
+    return false;
+}
+
+document.querySelectorAll('.term-ref').forEach(item => {
+    // 2. MOBILE / CLICK LOGIC
+    item.addEventListener('click', e => {
+        e.stopPropagation();
         const term = e.target.getAttribute('data-term');
-        if (definitions[term]) {
-                termDef.innerText = definitions[term];
-                tooltip.style.display = 'block';
+        
+        if (updateTooltipContent(term)) {
+            // Only use static positioning if we aren't currently tracking a mouse
+            const rect = e.target.getBoundingClientRect();
+            const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            
+            let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
+            const padding = 10;
+            
+            // Screen boundary checks
+            if (leftPos < padding) leftPos = padding;
+            if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
+                leftPos = window.innerWidth - tooltip.offsetWidth - padding;
+            }
 
-                const rect = e.target.getBoundingClientRect();
-                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
-                tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
-        } else if(term == "Leverage"){
-                termDef.innerText = "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic."
-                tooltip.style.display = 'block';
-
-                const rect = e.target.getBoundingClientRect();
-                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
-                tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+            tooltip.style.left = leftPos + 'px';
+            tooltip.style.top = (rect.bottom + scrollY + 10) + 'px';
         }
-  }
+    });
 
-  document.querySelectorAll('.term-ref').forEach(item => {
-        item.addEventListener('mouseenter', showTooltip);
+    // 3. DESKTOP / MOUSEMOVE LOGIC
+    if (isHoverable) {
+        item.addEventListener('mouseenter', e => {
+            const term = e.target.getAttribute('data-term');
+            updateTooltipContent(term);
+        });
 
         item.addEventListener('mousemove', e => {
-                const xPosition = e.clientX - (tooltip.offsetWidth / 2);
-                const yPosition = e.clientY + 20;
-                tooltip.style.left = xPosition + 'px';
-                tooltip.style.top = yPosition + 'px';
+            // Position tooltip relative to cursor
+            let finalX = e.clientX - (tooltip.offsetWidth / 2);
+            const finalY = e.clientY + 20;
+
+            // Desktop boundary checks
+            if (finalX + tooltip.offsetWidth > window.innerWidth) {
+                finalX = window.innerWidth - tooltip.offsetWidth - 10;
+            }
+            if (finalX < 10) finalX = 10;
+
+            tooltip.style.left = finalX + 'px';
+            tooltip.style.top = (window.scrollY + finalY) + 'px'; // Account for page scroll
         });
 
         item.addEventListener('mouseleave', () => {
-                tooltip.style.display = 'none';
+            tooltip.style.display = 'none';
         });
-        item.addEventListener('click', e => {
-                e.stopPropagation();
-                showTooltip(e);
-        });
-  });
+    }
+});
 
-  document.addEventListener('click', () => {
-        tooltip.style.display = 'none';
-  });
-
+document.addEventListener('click', () => {
+    tooltip.style.display = 'none';
+});
   </script>
 </body>
 </html>
