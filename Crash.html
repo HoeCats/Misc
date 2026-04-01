@@ -355,17 +355,34 @@ const definitions = {
   linkTerms();
   const tooltip = document.getElementById('dynamic-tooltip');
   const termDef = document.getElementById('tooltip-def');
-const isHoverable = window.matchMedia('(hover: hover)').matches;
-
-function updateTooltipContent(term) {
-    const definition = definitions[term] || (term === "Leverage" ? "Using borrowed money..." : null);
-    if (definition) {
-        termDef.innerText = definition;
-        tooltip.style.display = 'block';
-        return true;
-    }
-    return false;
-}
+  const isHoverable = window.matchMedia('(hover: hover)').matches;
+  function showTooltip(e) {
+      const term = e.target.getAttribute('data-term');
+      const definition = definitions[term] || (term === "Leverage" ? "Using borrowed money..." : null);
+  
+      if (definition) {
+          termDef.innerText = definition;
+          tooltip.style.display = 'block';
+  
+          // Get coordinates of the clicked word
+          const rect = e.target.getBoundingClientRect();
+          const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+          const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+  
+          // Calculate horizontal center
+          let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
+          
+          // Mobile Safety: Prevent tooltip from going off-screen left or right
+          const padding = 10;
+          if (leftPos < padding) leftPos = padding;
+          if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
+              leftPos = window.innerWidth - tooltip.offsetWidth - padding;
+          }
+  
+          tooltip.style.left = leftPos + 'px';
+          tooltip.style.top = (rect.bottom + scrollY + 10) + 'px';
+      }
+  }
 
 document.querySelectorAll('.term-ref').forEach(item => {
     // MOBILE / CLICK: Anchor to the WORD
@@ -395,34 +412,7 @@ document.querySelectorAll('.term-ref').forEach(item => {
 
     // DESKTOP / HOVER: Anchor to the CURSOR
     if (isHoverable) {
-        item.addEventListener('mouseenter', e => {
-            const term = e.currentTarget.getAttribute('data-term');
-            updateTooltipContent(term);
-        });
-
-        item.addEventListener('mousemove', e => {
-            tooltip.style.display = 'block';
-        
-            // FIX: Use pageX and pageY. 
-            // These properties already include the scroll offset automatically.
-            let finalX = e.pageX - (tooltip.offsetWidth / 2);
-            let finalY = e.pageY + 25; // Constant 25px below the cursor
-        
-            // Boundary check: horizontal only (prevent bleeding off screen)
-            const padding = 15;
-            const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-            
-            if (finalX < scrollX + padding) {
-                finalX = scrollX + padding;
-            }
-            if (finalX + tooltip.offsetWidth > window.innerWidth + scrollX - padding) {
-                finalX = window.innerWidth + scrollX - tooltip.offsetWidth - padding;
-            }
-        
-            tooltip.style.left = finalX + 'px';
-            tooltip.style.top = finalY + 'px';
-        });
-
+        item.addEventListener('mouseenter', showTooltip);
         item.addEventListener('mouseleave', () => {
             tooltip.style.display = 'none';
         });
