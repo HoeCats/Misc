@@ -374,61 +374,68 @@ function showTooltip(e) {
 		tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
 	}
 }
-function updateTooltipContent(term) {
-	const definition = definitions[term] || (term === "Leverage" ? "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic." : null);
-	if (definition) {
-		termDef.innerText = definition;
-		tooltip.style.display = 'block';
-		return true;
+document.addEventListener('click', () => {
+	if (tooltip.style.display == 'block') {
+		tooltip.style.display = 'none';
 	}
-	return false;
-}
-document.addEventListener('click', (e) => {
-    const target = e.target.closest('.term-ref');
-    
-    // If we clicked a term
-    if (target) {
-        e.stopPropagation();
-        const term = target.getAttribute('data-term');
-
-        if (updateTooltipContent(term)) {
-            const rect = target.getBoundingClientRect();
-            const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-
-            // Calculate position
-            let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
-
-            // Mobile boundary checks
-            const padding = 15;
-            if (leftPos < padding) leftPos = padding;
-            if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
-                leftPos = window.innerWidth - tooltip.offsetWidth - padding;
-            }
-
-            tooltip.style.left = leftPos + 'px';
-            tooltip.style.top = (rect.bottom + scrollY + 12) + 'px';
-            tooltip.style.display = 'block'; // Ensure it's visible
-        }
-    } else {
-        // If we clicked anywhere else, hide the tooltip
-        tooltip.style.display = 'none';
-    }
 });
 document.querySelectorAll('.term-ref').forEach(item => {
-	if (isHoverable) {
-		item.addEventListener('mouseenter', showTooltip);
-		item.addEventListener('mousemove', e => {
-			const xPosition = e.clientX - (tooltip.offsetWidth / 2);
-			const yPosition = e.clientY + 20;
-			tooltip.style.left = xPosition + 'px';
-			tooltip.style.top = yPosition + 'px';		
-			       
-		});
-		item.addEventListener('mouseleave', () => {
-			tooltip.style.display = 'none';
-		});
-	}
+	item.addEventListener('click', e => {
+		e.stopPropagation();
+		const term = e.currentTarget.getAttribute('data-term');
+		const term = e.target.getAttribute('data-term');
+		if (term) {
+			if (definitions[term]) {
+				termDef.innerText = definitions[term];
+			} else if (term == "Leverage") {
+				termDef.innerText = "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic."
+			}
+			const rect = target.getBoundingClientRect();
+			const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+			const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+			let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
+			const padding = 15;
+			if (leftPos < padding)
+				leftPos = padding;
+			if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
+				leftPos = window.innerWidth - tooltip.offsetWidth - padding;
+			}
+			tooltip.style.left = leftPos + 'px';
+			tooltip.style.top = (rect.bottom + scrollY + 12) + 'px';
+			tooltip.style.display = 'block';
+		}
+	});
+
+	item.addEventListener('mousemove', e => {
+		if (updateTooltipContent(term)) {
+			const rect = target.getBoundingClientRect();
+			const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+			const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+			let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
+			const padding = 15;
+			if (leftPos < padding)
+				leftPos = padding;
+			if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
+				leftPos = window.innerWidth - tooltip.offsetWidth - padding;
+			}
+			tooltip.style.left = leftPos + 'px';
+			tooltip.style.top = (rect.bottom + scrollY + 12) + 'px';
+			tooltip.style.display = 'block'; // Ensure it's visible
+		}
+		if (isHoverable) {
+			item.addEventListener('mouseenter', showTooltip);
+			item.addEventListener('mousemove', e => {
+				const xPosition = e.clientX - (tooltip.offsetWidth / 2);
+				const yPosition = e.clientY + 20;
+				tooltip.style.left = xPosition + 'px';
+				tooltip.style.top = yPosition + 'px';
+				       
+			});
+			item.addEventListener('mouseleave', () => {
+				tooltip.style.display = 'none';
+			});
+		}
+	});
 });
 
   </script>
