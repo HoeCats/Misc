@@ -147,22 +147,8 @@ p {
     font-weight: 700
 }
 
-.katex .textrm {
-    font-family: KaTeX_Main
-}
-
-.katex .mathtt,
-.katex .texttt {
-    font-family: KaTeX_Typewriter
-}
-
 .katex .mathnormal {
-    font-family: KaTeX_Math;
     font-style: italic
-}
-
-.katex .mathit {
-    font-family: KaTeX_Main
 }
 
 .katex .mathrm {
@@ -170,55 +156,25 @@ p {
 }
 
 .katex .mathbf {
-    font-family: KaTeX_Main;
     font-weight: 700
 }
 
 .katex .boldsymbol {
-    font-family: KaTeX_Math;
     font-weight: 700;
     font-style: italic
 }
 
-.katex .amsrm,
-.katex .mathbb,
-.katex .textbb {
-    font-family: KaTeX_AMS
-}
-
-.katex .mathcal {
-    font-family: KaTeX_Caligraphic
-}
-
-.katex .mathfrak,
-.katex .textfrak {
-    font-family: KaTeX_Fraktur
-}
-
-.katex .mathscr,
-.katex .textscr {
-    font-family: KaTeX_Script
-}
-
-.katex .mathsf,
-.katex .textsf {
-    font-family: KaTeX_SansSerif
-}
-
 .katex .mathboldsf,
 .katex .textboldsf {
-    font-family: KaTeX_SansSerif;
     font-weight: 700
 }
 
 .katex .mathitsf,
 .katex .textitsf {
-    font-family: KaTeX_SansSerif;
     font-style: italic
 }
 
 .katex .mainrm {
-    font-family: KaTeX_Main;
     font-style: normal
 }
 
@@ -859,26 +815,6 @@ h1 {
     font-size: .83360129em
 }
 
-.katex .delimsizing.mult .delim-size1>span,
-.katex .delimsizing.size1,
-.katex .op-symbol.small-op {
-    font-family: KaTeX_Size1
-}
-
-.katex .delimsizing.size2,
-.katex .op-symbol.large-op {
-    font-family: KaTeX_Size2
-}
-
-.katex .delimsizing.size3 {
-    font-family: KaTeX_Size3
-}
-
-.katex .delimsizing.mult .delim-size4>span,
-.katex .delimsizing.size4 {
-    font-family: KaTeX_Size4
-}
-
 .katex .nulldelimiter {
     display: inline-block;
     width: .12em
@@ -1093,48 +1029,6 @@ legend {
 
 body {
     counter-reset: a b
-}
-
-@font-face {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: 400;
-    src: url(/static/fonts/lato-normal.27bd77b.woff) format("woff")
-}
-
-@font-face {
-    font-family: Lato;
-    font-style: italic;
-    font-weight: 400;
-    src: url(/static/fonts/lato-normal-italic.f28f2d6.woff) format("woff")
-}
-
-@font-face {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: 600;
-    src: url(/static/fonts/lato-black.f80bda6.woff) format("woff")
-}
-
-@font-face {
-    font-family: Lato;
-    font-style: italic;
-    font-weight: 600;
-    src: url(/static/fonts/lato-black-italic.798eafd.woff) format("woff")
-}
-
-@font-face {
-    font-family: Roboto Mono;
-    font-style: normal;
-    font-weight: 400;
-    src: url(/static/fonts/RobotoMono-Regular.0b6a547.woff) format("woff")
-}
-
-@font-face {
-    font-family: Roboto Mono;
-    font-style: normal;
-    font-weight: 600;
-    src: url(/static/fonts/RobotoMono-Bold.819f3b2.woff) format("woff")
 }
 
 .prism *,
@@ -1569,7 +1463,7 @@ body,
 html {
     background: #0E0E0E !important;
     color: #fff !important;
-    font-family: 'Open Sans', sans-serif !important;
+    font-family: 'Open Sans', 'Noto Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     height: auto;
     width: auto
 }
@@ -1577,7 +1471,7 @@ html {
 table {
     border-spacing: 0;
     margin: 1px 0;
-    font-family: Open Sans;
+    font-family: 'Open Sans', 'Noto Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-weight: 700;
     box-shadow: 0 0 20px rgba(0, 0, 0, .15);
     width: 100%;
@@ -1613,7 +1507,7 @@ em {
     max-width: 950px;
     margin: 40px auto;
     padding: 0 20px;
-    font-family: 'Open Sans', sans-serif
+    font-family: 'Open Sans', 'Noto Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 table:not(.special)thead th {
