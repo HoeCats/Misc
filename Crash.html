@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap" rel="stylesheet">
+
   <title>Systemic Economic Failure</title>
   <link rel="stylesheet" href="Crash.css">
 </head>
@@ -364,12 +365,12 @@ const definitions = {
   const tooltip = document.getElementById('dynamic-tooltip');
   const termDef = document.getElementById('tooltip-def');
   const isHoverable = window.matchMedia('(hover: hover)').matches;
-    function showTooltip(e) {
+  function showTooltip(e) {
         const term = e.target.getAttribute('data-term');
         if (definitions[term]) {
                 termDef.innerText = definitions[term];
                 tooltip.style.display = 'block';
-
+          
                 const rect = e.target.getBoundingClientRect();
                 tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
                 tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
@@ -382,8 +383,7 @@ const definitions = {
                 tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
         }
   }
-document.querySelectorAll('.term-ref').forEach(item => {
-    // MOBILE / CLICK: Anchor to the WORD
+  document.querySelectorAll('.term-ref').forEach(item => {
     item.addEventListener('click', e => {
         e.stopPropagation();
         const term = e.currentTarget.getAttribute('data-term');
@@ -392,11 +392,9 @@ document.querySelectorAll('.term-ref').forEach(item => {
             const rect = e.currentTarget.getBoundingClientRect();
             const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
             const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-            
-            // Center the tooltip relative to the word's bounding box
+			
             let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
-            
-            // Screen edge protection
+			
             const padding = 15;
             if (leftPos < padding) leftPos = padding;
             if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
@@ -408,26 +406,23 @@ document.querySelectorAll('.term-ref').forEach(item => {
         }
     });
 
-    // DESKTOP / HOVER: Anchor to the CURSOR
     if (isHoverable) {
-        item.addEventListener('mouseenter', showTooltip);
-        item.addEventListener('mousemove', e => {
-                const xPosition = e.clientX - (tooltip.offsetWidth / 2);
-                const yPosition = e.clientY + 20;
-                tooltip.style.left = xPosition + 'px';
-                tooltip.style.top = yPosition + 'px';
-        });
+          item.addEventListener('mouseenter', showTooltip);
+          item.addEventListener('mousemove', e => {
+                  const xPosition = e.clientX - (tooltip.offsetWidth / 2);
+                  const yPosition = e.clientY + 20;
+                  tooltip.style.left = xPosition + 'px';
+                  tooltip.style.top = yPosition + 'px';
+          });
 
-        item.addEventListener('mouseleave', () => {
-                tooltip.style.display = 'none';
-        });
+          item.addEventListener('mouseleave', () => {
+                  tooltip.style.display = 'none';
+          });
     }
-});
-
-// Global close
-document.addEventListener('click', () => {
+  });
+  document.addEventListener('click', () => {
     tooltip.style.display = 'none';
-});
+  });
   </script>
 </body>
 </html>
