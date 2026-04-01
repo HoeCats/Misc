@@ -412,10 +412,18 @@ document.querySelectorAll('.term-ref').forEach(item => {
 
     // DESKTOP / HOVER: Anchor to the CURSOR
     if (isHoverable) {
-        item.addEventListener('mouseenter', showTooltip);
-        item.addEventListener('mouseleave', () => {
-            tooltip.style.display = 'none';
-        });
+        item.addEventListener('mouseenter', showTooltip);
+
+        item.addEventListener('mousemove', e => {
+                const xPosition = e.clientX - (tooltip.offsetWidth / 2);
+                const yPosition = e.clientY + 20;
+                tooltip.style.left = xPosition + 'px';
+                tooltip.style.top = yPosition + 'px';
+        });
+
+        item.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+        });
     }
 });
 
