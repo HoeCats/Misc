@@ -401,20 +401,24 @@ document.querySelectorAll('.term-ref').forEach(item => {
         });
 
         item.addEventListener('mousemove', e => {
-            const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-
-            // Align tooltip center with cursor X
-            let finalX = e.clientX + scrollX - (tooltip.offsetWidth / 2);
-            let finalY = e.clientY + scrollY + 25; // 25px below cursor
-
-            // Desktop edge protection
+            tooltip.style.display = 'block';
+        
+            // FIX: Use pageX and pageY. 
+            // These properties already include the scroll offset automatically.
+            let finalX = e.pageX - (tooltip.offsetWidth / 2);
+            let finalY = e.pageY + 25; // Constant 25px below the cursor
+        
+            // Boundary check: horizontal only (prevent bleeding off screen)
             const padding = 15;
-            if (finalX < padding) finalX = padding;
+            const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+            
+            if (finalX < scrollX + padding) {
+                finalX = scrollX + padding;
+            }
             if (finalX + tooltip.offsetWidth > window.innerWidth + scrollX - padding) {
                 finalX = window.innerWidth + scrollX - tooltip.offsetWidth - padding;
             }
-
+        
             tooltip.style.left = finalX + 'px';
             tooltip.style.top = finalY + 'px';
         });
