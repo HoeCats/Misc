@@ -351,39 +351,37 @@ const definitions = {
                 p.innerHTML = html;
         });
   }
-
+  function updateTooltipContent(term) {
+      const definition = definitions[term] || (term === "Leverage" ? "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic." : null);
+      if (definition) {
+          termDef.innerText = definition;
+          tooltip.style.display = 'block';
+          return true;
+      }
+      return false;
+  }
   linkTerms();
   const tooltip = document.getElementById('dynamic-tooltip');
   const termDef = document.getElementById('tooltip-def');
   const isHoverable = window.matchMedia('(hover: hover)').matches;
-  function showTooltip(e) {
-      const term = e.target.getAttribute('data-term');
-      const definition = definitions[term] || (term === "Leverage" ? "Using borrowed money..." : null);
-  
-      if (definition) {
-          termDef.innerText = definition;
-          tooltip.style.display = 'block';
-  
-          // Get coordinates of the clicked word
-          const rect = e.target.getBoundingClientRect();
-          const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-          const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-  
-          // Calculate horizontal center
-          let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
-          
-          // Mobile Safety: Prevent tooltip from going off-screen left or right
-          const padding = 10;
-          if (leftPos < padding) leftPos = padding;
-          if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
-              leftPos = window.innerWidth - tooltip.offsetWidth - padding;
-          }
-  
-          tooltip.style.left = leftPos + 'px';
-          tooltip.style.top = (rect.bottom + scrollY + 10) + 'px';
-      }
-  }
+    function showTooltip(e) {
+        const term = e.target.getAttribute('data-term');
+        if (definitions[term]) {
+                termDef.innerText = definitions[term];
+                tooltip.style.display = 'block';
 
+                const rect = e.target.getBoundingClientRect();
+                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
+                tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+        } else if(term == "Leverage"){
+                termDef.innerText = "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic."
+                tooltip.style.display = 'block';
+
+                const rect = e.target.getBoundingClientRect();
+                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
+                tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+        }
+  }
 document.querySelectorAll('.term-ref').forEach(item => {
     // MOBILE / CLICK: Anchor to the WORD
     item.addEventListener('click', e => {
@@ -413,7 +411,6 @@ document.querySelectorAll('.term-ref').forEach(item => {
     // DESKTOP / HOVER: Anchor to the CURSOR
     if (isHoverable) {
         item.addEventListener('mouseenter', showTooltip);
-
         item.addEventListener('mousemove', e => {
                 const xPosition = e.clientX - (tooltip.offsetWidth / 2);
                 const yPosition = e.clientY + 20;
