@@ -358,6 +358,7 @@
 	const tooltip = document.getElementById('dynamic-tooltip');
 	const termDef = document.getElementById('tooltip-def');
 	const isHoverable = window.matchMedia('(hover: hover)').matches;
+	const container = document.querySelector('.stackedit__html') || document.body;
 	function showTooltip(e) {
 		const term = e.target.getAttribute('data-term');
 		if (definitions[term]) {
@@ -374,9 +375,35 @@
 			tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
 			tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
 		}
-		 
 	}
-	const container = document.querySelector('.content-wrapper') || document.body;
+	function closeTooltip() {
+		tooltip.style.display = 'none';
+		tooltip.dataset.activeTerm = '';
+	}
+	function showTooltip2(target, text, term) {
+		termDef.innerText = text;
+		tooltip.style.display = 'block';
+		tooltip.style.visibility = 'hidden';
+		tooltip.dataset.activeTerm = term;
+
+		const rect = target.getBoundingClientRect();
+		const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+		const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+		let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
+
+		const padding = 15;
+		if (leftPos < padding) leftPos = padding;
+		if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
+			leftPos = window.innerWidth - tooltip.offsetWidth - padding;
+		}
+
+		tooltip.style.left = leftPos + 'px';
+		tooltip.style.top = (rect.bottom + scrollY + 12) + 'px';
+		tooltip.style.display = 'block';
+		tooltip.style.visibility = 'visible';
+	}
+
 
 	container.addEventListener('click', function (e) {
 		const target = e.target.closest('.term-ref');
@@ -389,7 +416,7 @@
 			closeTooltip();
 			return;
 		}
-		const text = definitions[term] || (term === "Leverage" ? "Using borrowed money..." : null);
+		const text = definitions[term] || (term === "Leverage" ? "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic." : null);
 		if (text) {
 			showTooltip2(target, text, term);
 		}
@@ -402,29 +429,6 @@
 		passive: true
 	});
 
-	function closeTooltip() {
-		tooltip.style.display = 'none';
-		tooltip.dataset.activeTerm = '';
-	}
-	function showTooltip2(target, text, term) {
-		termDef.innerText = text;
-		tooltip.style.display = 'block';
-		tooltip.style.visibility = 'hidden';
-		tooltip.dataset.activeTerm = term;
-
-		const rect = target.getBoundingClientRect();
-		const scrollX = window.scrollX || window.pageXOffset;
-		const scrollY = window.scrollY || window.pageYOffset;
-		const viewportWidth = document.documentElement.clientWidth;
-
-		let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
-		const padding = 10;
-		leftPos = Math.max(padding, Math.min(leftPos, viewportWidth - tooltip.offsetWidth - padding));
-
-		tooltip.style.left = `${leftPos}px`;
-		tooltip.style.top = `${rect.bottom + scrollY + 12}px`;
-		tooltip.style.visibility = 'visible';
-	}
 	document.querySelectorAll('.term-ref').forEach(item => {
 		if (isHoverable) {
 			item.addEventListener('mouseenter', showTooltip);
@@ -440,6 +444,7 @@
 		}
 	});
 })();
+
 
 </script>
 </body>
