@@ -384,7 +384,7 @@
 		termDef.innerText = text;
 		tooltip.dataset.activeTerm = term;
 		tooltip.style.display = 'block';
-		const rect = e.target.getBoundingClientRect();
+		const rect = target.getBoundingClientRect();
 		tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
 		tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
 	}
