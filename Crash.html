@@ -311,122 +311,136 @@
     </table>
   </div>
 <script>
-const definitions = {
-	"Shadow Banking": "Financial intermediaries (like hedge funds or private equity) that provide bank-like services but are not subject to the same strict regulations as traditional banks.",
-	"Basis Trade": "A complex strategy where a fund bets on the tiny price difference between a government bond and its 'future' contract. To make a profit, they must borrow massive amounts of money.",
-	"Repo Market": "Short for 'Repurchase Agreement.' It is the 'plumbing' of the financial system where institutions lend cash for very short periods in exchange for collateral like Treasuries.",
-	"Haircut": "The 'safety buffer' in a loan. A 'zero haircut' means the lender gives you 100% of the collateral value, leaving no room for price drops.",
-	"Rehypothecation": "When a bank takes the collateral you gave them for a loan and uses it as their own collateral to get a second loan from someone else.",
-	"Carry Trade (Yen)": "Borrowing money in a country with very low interest rates (Japan) to invest in a country with higher returns (US). If rates rise, the cheap money disappears.",
-	"Petrodollar / Petroyuan": "The global practice of trading oil in US Dollars. Shifting to the Yuan reduces global demand for the US Dollar significantly.",
-	"Exorbitant Privilege": "The unique benefit the US has as the world's primary reserve currency, allowing it to run huge debts that other countries cannot.",
-	"Yield Mismatch": "When the return on an investment doesn't align with the risk or inflation rate, causing investors to move money elsewhere.",
-	"Margin Call": "A demand from a lender for an investor to deposit more money to cover possible losses. If they can't pay, assets are sold forcibly.",
-	"Maturity Wall": "A point in time when a massive amount of corporate loans are due to be paid back or renegotiated at potentially higher rates.",
-	"Mark-to-Model": "Valuing assets based on mathematical 'assumptions' rather than actual market prices. Allows companies to pretend assets are worth 100% even if failing.",
-	"Gating": "When an investment fund prevents investors from withdrawing their money to stop a 'run on the bank.'",
-	"Payment in Kind": "A 'buy now, pay later' for interest. Instead of paying cash, the interest is added to the total debt balance.",
-	"Zombie Company": "A company that earns just enough to service its debt but can never actually pay off the principal.",
-	"Zombie Companies": "A company that earns just enough to service its debt but can never actually pay off the principal.",
-	"Net International Investment Position (NIIP)": "The gap between what a country owns abroad and what foreigners own within that country. A deeply negative NIIP means the country is a net debtor.",
-	"Dollar Velocity": "The frequency at which a single dollar is spent. High velocity can lead to inflation as more money chases the same goods.",
-	"Liquidity": "How quickly and easily you can turn an asset into cash without losing a significant amount of its value.",
-	"Yield": "The earnings generated on an investment over a specific period, expressed as a percentage of the investment’s cost or current market value.",
-	"Valuation": "The process of determining what a company is actually worth.",
-	"Chapter 7": "Chapter 7 is a total liquidation where assets are sold to erase debt, unlike Chapter 11 or 13, which focus on reorganizing and paying creditors back over time."
-};
-function linkTerms() {
-	const paragraphs = document.querySelectorAll('.stackedit__html p');
-	const termKeys = Object.keys(definitions).sort((a, b) => b.length - a.length);
+(function () {
+	const definitions = {
+		"Shadow Banking": "Financial intermediaries (like hedge funds or private equity) that provide bank-like services but are not subject to the same strict regulations as traditional banks.",
+		"Basis Trade": "A complex strategy where a fund bets on the tiny price difference between a government bond and its 'future' contract. To make a profit, they must borrow massive amounts of money.",
+		"Repo Market": "Short for 'Repurchase Agreement.' It is the 'plumbing' of the financial system where institutions lend cash for very short periods in exchange for collateral like Treasuries.",
+		"Haircut": "The 'safety buffer' in a loan. A 'zero haircut' means the lender gives you 100% of the collateral value, leaving no room for price drops.",
+		"Rehypothecation": "When a bank takes the collateral you gave them for a loan and uses it as their own collateral to get a second loan from someone else.",
+		"Carry Trade (Yen)": "Borrowing money in a country with very low interest rates (Japan) to invest in a country with higher returns (US). If rates rise, the cheap money disappears.",
+		"Petrodollar / Petroyuan": "The global practice of trading oil in US Dollars. Shifting to the Yuan reduces global demand for the US Dollar significantly.",
+		"Exorbitant Privilege": "The unique benefit the US has as the world's primary reserve currency, allowing it to run huge debts that other countries cannot.",
+		"Yield Mismatch": "When the return on an investment doesn't align with the risk or inflation rate, causing investors to move money elsewhere.",
+		"Margin Call": "A demand from a lender for an investor to deposit more money to cover possible losses. If they can't pay, assets are sold forcibly.",
+		"Maturity Wall": "A point in time when a massive amount of corporate loans are due to be paid back or renegotiated at potentially higher rates.",
+		"Mark-to-Model": "Valuing assets based on mathematical 'assumptions' rather than actual market prices. Allows companies to pretend assets are worth 100% even if failing.",
+		"Gating": "When an investment fund prevents investors from withdrawing their money to stop a 'run on the bank.'",
+		"Payment in Kind": "A 'buy now, pay later' for interest. Instead of paying cash, the interest is added to the total debt balance.",
+		"Zombie Company": "A company that earns just enough to service its debt but can never actually pay off the principal.",
+		"Zombie Companies": "A company that earns just enough to service its debt but can never actually pay off the principal.",
+		"Net International Investment Position (NIIP)": "The gap between what a country owns abroad and what foreigners own within that country. A deeply negative NIIP means the country is a net debtor.",
+		"Dollar Velocity": "The frequency at which a single dollar is spent. High velocity can lead to inflation as more money chases the same goods.",
+		"Liquidity": "How quickly and easily you can turn an asset into cash without losing a significant amount of its value.",
+		"Yield": "The earnings generated on an investment over a specific period, expressed as a percentage of the investment’s cost or current market value.",
+		"Valuation": "The process of determining what a company is actually worth.",
+		"Chapter 7": "Chapter 7 is a total liquidation where assets are sold to erase debt, unlike Chapter 11 or 13, which focus on reorganizing and paying creditors back over time."
+	};
+	function linkTerms() {
+		const paragraphs = document.querySelectorAll('.stackedit__html p');
+		const termKeys = Object.keys(definitions).sort((a, b) => b.length - a.length);
 
-	paragraphs.forEach(p => {
-		let html = p.innerHTML;
-		termKeys.forEach(term => {
-			const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-			const regex = new RegExp(`(?<!<[^>]*)${escapedTerm}(s|es|ed|ing)?(?![^<]*>)`, 'gi');
-			html = html.replace(regex, (match) => {
-				if (match.includes('class="term-ref"'))
-					return match;
-				return `<span class="term-ref" data-term="${term}">${match}<\/span>`;
+		paragraphs.forEach(p => {
+			let html = p.innerHTML;
+			termKeys.forEach(term => {
+				const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+				const regex = new RegExp(`(?<!<[^>]*)${escapedTerm}(s|es|ed|ing)?(?![^<]*>)`, 'gi');
+				html = html.replace(regex, (match) => {
+					if (match.includes('class="term-ref"'))
+						return match;
+					return `<span class="term-ref" data-term="${term}">${match}<\/span>`;
+				});
 			});
+			p.innerHTML = html;
 		});
-		p.innerHTML = html;
+	}
+	linkTerms();
+	const tooltip = document.getElementById('dynamic-tooltip');
+	const termDef = document.getElementById('tooltip-def');
+	const isHoverable = window.matchMedia('(hover: hover)').matches;
+	function showTooltip(e) {
+		const term = e.target.getAttribute('data-term');
+		if (definitions[term]) {
+			termDef.innerText = definitions[term];
+			tooltip.style.display = 'block';
+			const rect = e.target.getBoundingClientRect();
+			tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
+			tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+		} else if (term == "Leverage") {
+			termDef.innerText = "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic.";
+			tooltip.style.display = 'block';
+
+			const rect = e.target.getBoundingClientRect();
+			tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
+			tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+		}
+		 
+	}
+	const container = document.querySelector('.content-wrapper') || document.body;
+
+	container.addEventListener('click', function (e) {
+		const target = e.target.closest('.term-ref');
+		if (!target)
+			return;
+		e.stopPropagation();
+		const term = target.getAttribute('data-term');
+		const isAlreadyOpen = tooltip.style.display === 'block' && tooltip.dataset.activeTerm === term;
+		if (isAlreadyOpen) {
+			closeTooltip();
+			return;
+		}
+		const text = definitions[term] || (term === "Leverage" ? "Using borrowed money..." : null);
+		if (text) {
+			showTooltip2(target, text, term);
+		}
 	});
-}
-linkTerms();
-const tooltip = document.getElementById('dynamic-tooltip');
-const termDef = document.getElementById('tooltip-def');
-const isHoverable = window.matchMedia('(hover: hover)').matches;
-  function showTooltip(e) {
-        const term = e.target.getAttribute('data-term');
-        if (definitions[term]) {
-                termDef.innerText = definitions[term];
-                tooltip.style.display = 'block';
+	document.addEventListener('click', function (e) {
+		if (!tooltip.contains(e.target)) {
+			closeTooltip();
+		}
+	}, {
+		passive: true
+	});
 
-                const rect = e.target.getBoundingClientRect();
-                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
-                tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
-        } else if(term == "Leverage"){
-                termDef.innerText = "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic."
-                tooltip.style.display = 'block';
-
-                const rect = e.target.getBoundingClientRect();
-                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
-                tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
-        }
-  }
-const container = document.querySelector('.content-wrapper') || document.body;
-
-container.addEventListener('click', function(e) {
-	const target = e.target.closest('.term-ref');
-	if (tooltip.style.display == 'block') {
+	function closeTooltip() {
 		tooltip.style.display = 'none';
-		return;
+		tooltip.dataset.activeTerm = '';
 	}
-	if (!target) {
-		tooltip.style.display = 'none';
-		return;
-	}
-	e.stopPropagation();
-	const term = target.getAttribute('data-term');
-	let text = definitions[term];
-	if (!text && term === "Leverage") {
-		text = "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic.";
-	}
-	if (text) {
+	function showTooltip2(target, text, term) {
 		termDef.innerText = text;
-		
 		tooltip.style.display = 'block';
 		tooltip.style.visibility = 'hidden';
+		tooltip.dataset.activeTerm = term;
 
 		const rect = target.getBoundingClientRect();
-		const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-		const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-		const tooltipWidth = tooltip.offsetWidth;
-		
-		let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltipWidth / 2);
-		const padding = 15;
-		leftPos = Math.max(padding, Math.min(leftPos, window.innerWidth - tooltipWidth - padding));
-		
+		const scrollX = window.scrollX || window.pageXOffset;
+		const scrollY = window.scrollY || window.pageYOffset;
+		const viewportWidth = document.documentElement.clientWidth;
+
+		let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
+		const padding = 10;
+		leftPos = Math.max(padding, Math.min(leftPos, viewportWidth - tooltip.offsetWidth - padding));
+
 		tooltip.style.left = `${leftPos}px`;
 		tooltip.style.top = `${rect.bottom + scrollY + 12}px`;
 		tooltip.style.visibility = 'visible';
 	}
-});
-document.querySelectorAll('.term-ref').forEach(item => {
-	if (isHoverable) {
-		item.addEventListener('mouseenter', showTooltip);
-		item.addEventListener('mousemove', e => {
-			const xPosition = e.clientX - (tooltip.offsetWidth / 2);
-			const yPosition = e.clientY + 20;
-			tooltip.style.left = xPosition + 'px';
-			tooltip.style.top = yPosition + 'px';
-		});
-		item.addEventListener('mouseleave', () => {
-			tooltip.style.display = 'none';
-		});
-	}
-});
+	document.querySelectorAll('.term-ref').forEach(item => {
+		if (isHoverable) {
+			item.addEventListener('mouseenter', showTooltip);
+			item.addEventListener('mousemove', e => {
+				const xPosition = e.clientX - (tooltip.offsetWidth / 2);
+				const yPosition = e.clientY + 20;
+				tooltip.style.left = xPosition + 'px';
+				tooltip.style.top = yPosition + 'px';
+			});
+			item.addEventListener('mouseleave', () => {
+				tooltip.style.display = 'none';
+			});
+		}
+	});
+})();
+
 </script>
 </body>
 </html>
