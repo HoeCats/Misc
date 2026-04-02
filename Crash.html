@@ -310,6 +310,7 @@
       </tbody>
     </table>
   </div><script>
+
 const definitions = {
 	"Shadow Banking": "Financial intermediaries (like hedge funds or private equity) that provide bank-like services but are not subject to the same strict regulations as traditional banks.",
 	"Basis Trade": "A complex strategy where a fund bets on the tiny price difference between a government bond and its 'future' contract. To make a profit, they must borrow massive amounts of money.",
@@ -382,7 +383,6 @@ document.addEventListener('click', () => {
 document.querySelectorAll('.term-ref').forEach(item => {
 	item.addEventListener('click', e => {
 		e.stopPropagation();
-		const term = e.currentTarget.getAttribute('data-term');
 		const term = e.target.getAttribute('data-term');
 		if (term) {
 			if (definitions[term]) {
@@ -395,8 +395,9 @@ document.querySelectorAll('.term-ref').forEach(item => {
 			const scrollY = window.pageYOffset || document.documentElement.scrollTop;
 			let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
 			const padding = 15;
-			if (leftPos < padding)
+			if (leftPos < padding) {
 				leftPos = padding;
+			}
 			if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
 				leftPos = window.innerWidth - tooltip.offsetWidth - padding;
 			}
@@ -418,6 +419,8 @@ document.querySelectorAll('.term-ref').forEach(item => {
 		});
 	}
 });
+
+  
 
   </script>
 </body>
