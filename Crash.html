@@ -390,7 +390,7 @@ document.querySelectorAll('.term-ref').forEach(item => {
 			} else if (term == "Leverage") {
 				termDef.innerText = "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic."
 			}
-			const rect = target.getBoundingClientRect();
+			const rect = e.target.getBoundingClientRect();
 			const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
 			const scrollY = window.pageYOffset || document.documentElement.scrollTop;
 			let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
