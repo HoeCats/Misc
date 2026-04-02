@@ -309,8 +309,8 @@
         </tr>
       </tbody>
     </table>
-  </div><script>
-
+  </div>
+<script>
 const definitions = {
 	"Shadow Banking": "Financial intermediaries (like hedge funds or private equity) that provide bank-like services but are not subject to the same strict regulations as traditional banks.",
 	"Basis Trade": "A complex strategy where a fund bets on the tiny price difference between a government bond and its 'future' contract. To make a profit, they must borrow massive amounts of money.",
@@ -359,6 +359,8 @@ const termDef = document.getElementById('tooltip-def');
 const isHoverable = window.matchMedia('(hover: hover)').matches;
 function showTooltip(e) {
 	const term = e.target.getAttribute('data-term');
+	const term = target.getAttribute('data-term');
+    const description = definitions[term];
 	if (definitions[term]) {
 		termDef.innerText = definitions[term];
 		tooltip.style.display = 'block';
@@ -375,37 +377,45 @@ function showTooltip(e) {
 		tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
 	}
 }
-document.addEventListener('click', () => {
+const container = document.querySelector('.content-wrapper') || document.body;
+
+container.addEventListener('click', function(e) {
+	const target = e.target.closest('.term-ref');
 	if (tooltip.style.display == 'block') {
 		tooltip.style.display = 'none';
+		return;
+	}
+	if (!target) {
+		tooltip.style.display = 'none';
+		return;
+	}
+	e.stopPropagation();
+	const term = target.getAttribute('data-term');
+	let text = definitions[term];
+	if (!text && term === "Leverage") {
+		text = "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic.";
+	}
+	if (text) {
+		termDef.innerText = text;
+		
+		tooltip.style.display = 'block';
+		tooltip.style.visibility = 'hidden';
+
+		const rect = target.getBoundingClientRect();
+		const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+		const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+		const tooltipWidth = tooltip.offsetWidth;
+		
+		let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltipWidth / 2);
+		const padding = 15;
+		leftPos = Math.max(padding, Math.min(leftPos, window.innerWidth - tooltipWidth - padding));
+		
+		tooltip.style.left = `${leftPos}px`;
+		tooltip.style.top = `${rect.bottom + scrollY + 12}px`;
+		tooltip.style.visibility = 'visible';
 	}
 });
 document.querySelectorAll('.term-ref').forEach(item => {
-	item.addEventListener('click', e => {
-		e.stopPropagation();
-		const term = e.target.getAttribute('data-term');
-		if (term) {
-			if (definitions[term]) {
-				termDef.innerText = definitions[term];
-			} else if (term == "Leverage") {
-				termDef.innerText = "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic."
-			}
-			const rect = e.target.getBoundingClientRect();
-			const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-			const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-			let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
-			const padding = 15;
-			if (leftPos < padding) {
-				leftPos = padding;
-			}
-			if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
-				leftPos = window.innerWidth - tooltip.offsetWidth - padding;
-			}
-			tooltip.style.left = leftPos + 'px';
-			tooltip.style.top = (rect.bottom + scrollY + 12) + 'px';
-			tooltip.style.display = 'block';
-		}
-	});
 	if (isHoverable) {
 		item.addEventListener('mouseenter', showTooltip);
 		item.addEventListener('mousemove', e => {
@@ -419,9 +429,6 @@ document.querySelectorAll('.term-ref').forEach(item => {
 		});
 	}
 });
-
-  
-
-  </script>
+</script>
 </body>
 </html>
