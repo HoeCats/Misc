@@ -310,7 +310,7 @@
       </tbody>
     </table>
   </div>
-	<script>
+<script>
 (function () {
 	const definitions = {
 		"Shadow Banking": "Financial intermediaries (like hedge funds or private equity) that provide bank-like services but are not subject to the same strict regulations as traditional banks.",
@@ -385,8 +385,13 @@
 		tooltip.dataset.activeTerm = term;
 		tooltip.style.display = 'block';
 		const rect = target.getBoundingClientRect();
-		tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
-		tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+
+		const top = rect.bottom + 8; 
+		const left = rect.left + (rect.width / 2);
+
+		tooltip.style.top = `${top}px`;
+		tooltip.style.left = `${left}px`;
+		tooltip.style.transform = 'translateX(-50%)';
 	}
 	document.addEventListener('click', function (e) {
 		if (!tooltip.contains(e.target)) {
@@ -397,9 +402,10 @@
 	});
 	document.querySelectorAll('.term-ref').forEach(item => {
 		item.addEventListener('click', function (e) {
-			const target =  e.target
-			if (!target)
+			const target =  e.currentTarget
+			if (!target) {
 				return;
+			}
 			e.stopPropagation();
 			const term = target.getAttribute('data-term');
 			const isAlreadyOpen = tooltip.style.display === 'block' && tooltip.dataset.activeTerm === term;
@@ -426,8 +432,6 @@
 		}
 	});
 })();
-
-
 </script>
 </body>
 </html>
