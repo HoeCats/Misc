@@ -384,33 +384,9 @@
 		termDef.innerText = text;
 		tooltip.dataset.activeTerm = term;
 		tooltip.style.display = 'block';
-		tooltip.style.visibility = 'hidden'; 
-
-		const rect = target.getBoundingClientRect();
-		const tipRect = tooltip.getBoundingClientRect();
-		const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-		const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-		const viewportWidth = document.documentElement.clientWidth;
-		let leftPos = rect.left + scrollX + (rect.width / 2) - (tipRect.width / 2);
-		const padding = 15;
-
-		if (leftPos < padding) {
-			leftPos = padding;
-		} else if (leftPos + tipRect.width > viewportWidth - padding) {
-			leftPos = viewportWidth - tipRect.width - padding;
-		}
-		tooltip.style.left = leftPos + 'px';
-
-		const margin = 12;
-		const spaceBelow = window.innerHeight - rect.bottom;
-		const spaceAbove = rect.top;
-		if (spaceBelow < tipRect.height + margin && spaceAbove > tipRect.height + margin) {
-			tooltip.style.top = (rect.top + scrollY - tipRect.height - margin) + 'px';
-		} else {
-			tooltip.style.top = (rect.bottom + scrollY + margin) + 'px';
-		}
-
-		tooltip.style.visibility = 'visible';
+		const rect = e.target.getBoundingClientRect();
+		tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
+		tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
 	}
 	document.addEventListener('click', function (e) {
 		if (!tooltip.contains(e.target)) {
@@ -450,6 +426,7 @@
 		}
 	});
 })();
+
 
 </script>
 </body>
