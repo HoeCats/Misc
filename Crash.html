@@ -357,26 +357,24 @@ linkTerms();
 const tooltip = document.getElementById('dynamic-tooltip');
 const termDef = document.getElementById('tooltip-def');
 const isHoverable = window.matchMedia('(hover: hover)').matches;
-function showTooltip(e) {
-	const term = e.target.getAttribute('data-term');
-	const term = target.getAttribute('data-term');
-    const description = definitions[term];
-	if (definitions[term]) {
-		termDef.innerText = definitions[term];
-		tooltip.style.display = 'block';
+  function showTooltip(e) {
+        const term = e.target.getAttribute('data-term');
+        if (definitions[term]) {
+                termDef.innerText = definitions[term];
+                tooltip.style.display = 'block';
 
-		const rect = e.target.getBoundingClientRect();
-		tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
-		tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
-	} else if (term == "Leverage") {
-		termDef.innerText = "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic."
-			tooltip.style.display = 'block';
+                const rect = e.target.getBoundingClientRect();
+                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
+                tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+        } else if(term == "Leverage"){
+                termDef.innerText = "Using borrowed money to increase the potential return of an investment. It acts as a magnifier: it makes gains bigger, but it makes losses catastrophic."
+                tooltip.style.display = 'block';
 
-		const rect = e.target.getBoundingClientRect();
-		tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
-		tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
-	}
-}
+                const rect = e.target.getBoundingClientRect();
+                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
+                tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+        }
+  }
 const container = document.querySelector('.content-wrapper') || document.body;
 
 container.addEventListener('click', function(e) {
