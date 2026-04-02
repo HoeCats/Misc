@@ -382,28 +382,29 @@
 	}
 	function showTooltip2(target, text, term) {
 		termDef.innerText = text;
-		tooltip.style.display = 'block';
-		tooltip.style.visibility = 'hidden';
 		tooltip.dataset.activeTerm = term;
-
 		const rect = target.getBoundingClientRect();
 		const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
 		const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-
 		let leftPos = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
-
 		const padding = 15;
 		if (leftPos < padding) leftPos = padding;
 		if (leftPos + tooltip.offsetWidth > window.innerWidth - padding) {
 			leftPos = window.innerWidth - tooltip.offsetWidth - padding;
 		}
-
 		tooltip.style.left = leftPos + 'px';
-		tooltip.style.top = (rect.bottom + scrollY + 12) + 'px';
-		tooltip.style.display = 'block';
-		tooltip.style.visibility = 'visible';
-	}
 
+		const tooltipHeight = tooltip.offsetHeight;
+		const spaceBelow = window.innerHeight - rect.bottom;
+		const spaceAbove = rect.top;
+		const margin = 12;
+		if (spaceBelow < tooltipHeight + margin && spaceAbove > spaceBelow) {
+			tooltip.style.top = (rect.top + scrollY - tooltipHeight - margin) + 'px';
+		} else {
+			tooltip.style.top = (rect.bottom + scrollY + margin) + 'px';
+		}
+		tooltip.style.display = 'block'; 
+	}
 
 	container.addEventListener('click', function (e) {
 		const target = e.target.closest('.term-ref');
@@ -428,7 +429,6 @@
 	}, {
 		passive: true
 	});
-
 	document.querySelectorAll('.term-ref').forEach(item => {
 		if (isHoverable) {
 			item.addEventListener('mouseenter', showTooltip);
@@ -444,8 +444,6 @@
 		}
 	});
 })();
-
-
 </script>
 </body>
 </html>
